@@ -1,9 +1,9 @@
 package pl.tdf.atak.TAKLog;
 
-import static pl.tdf.atak.TAKLog.TakLogConstants.LIST_LIMIT;
-
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +19,8 @@ import com.atakmap.android.util.time.TimeListener;
 import com.atakmap.android.util.time.TimeViewUpdater;
 import com.atakmap.coremap.maps.time.CoordinatedTime;
 
+import pl.tdf.atak.TAKLog.preferences.PreferencesResolver;
+import pl.tdf.atak.TAKLog.preferences.SharedPreferenceChangeListener;
 import pl.tdf.atak.TAKLog.recyclerview.RecyclerView;
 import pl.tdf.atak.TAKLog.recyclerview.RecyclerViewAdapter;
 import pl.tdf.atak.TAKLog.plugin.R;
@@ -35,6 +37,8 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
     private final RecyclerViewAdapter recyclerViewAdapter;
     private final TimeViewUpdater timeUpdater;
     private final RecyclerView recyclerView;
+    private final SharedPreferenceChangeListener preferenceChangeListener;
+    private final SharedPreferences sharedPrefs;
 
     private SortMode sortMode = SortMode.TIME;
 
@@ -63,6 +67,13 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
         timeUpdater.register(this);
 
         updateSubtitle();
+
+        preferenceChangeListener = new SharedPreferenceChangeListener(() -> {
+            updateSubtitle();
+            recyclerViewAdapter.revalidateListSize();
+        });
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mapView.getContext());
+        sharedPrefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
     private void toggleSort(Button view) {
@@ -108,12 +119,13 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
 
     private void updateSubtitle() {
         TextView subtitle = logView.findViewById(R.id.subtitle);
-        subtitle.setText("Showing last " + LIST_LIMIT + " events, sorted by " + sortMode.getLabel());
+        subtitle.setText("Showing last " + PreferencesResolver.getLogLimit() + " events, sorted by " + sortMode.getLabel());
     }
 
     @Override
     protected void disposeImpl() {
         timeUpdater.unregister(this);
+        sharedPrefs.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
     @Override

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.atakmap.android.gui.PanEditTextPreference
+        android:key="pl.tdf.atak.TAKLog.PREFERENCES_EVENTS_LIMIT"
+        android:defaultValue="100"
+        android:summary="Provide number of items stored in the log. Large numbers may impact performance."
+        android:title="Events limit" />
+</PreferenceScreen>

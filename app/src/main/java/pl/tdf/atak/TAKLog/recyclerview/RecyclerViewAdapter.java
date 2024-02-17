@@ -5,7 +5,6 @@ import static com.atakmap.android.maps.MapItem.computeDistance;
 import static com.atakmap.android.maps.MapView.getMapView;
 import static pl.tdf.atak.TAKLog.MapItemDataRetriever.getAuthorName;
 import static pl.tdf.atak.TAKLog.MapItemDataRetriever.getReadableTime;
-import static pl.tdf.atak.TAKLog.TakLogConstants.LIST_LIMIT;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -35,6 +34,7 @@ import java.util.Locale;
 
 import pl.tdf.atak.TAKLog.LogElement;
 import pl.tdf.atak.TAKLog.plugin.R;
+import pl.tdf.atak.TAKLog.preferences.PreferencesResolver;
 import pl.tdf.atak.TAKLog.sorting.TimeComparator;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter {
@@ -59,13 +59,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             return;
         }
 
-        if (items.size() == LIST_LIMIT) {
+        if (items.size() == PreferencesResolver.getLogLimit()) {
             items.remove(items.size() - 1);
         }
 
         items.add(newElement);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             items.sort(comparator);
+        }
+    }
+
+    public void revalidateListSize() {
+        if (items.size() > PreferencesResolver.getLogLimit()) {
+            items.subList(PreferencesResolver.getLogLimit(), items.size()).clear();
         }
     }
 

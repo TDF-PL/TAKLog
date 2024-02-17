@@ -5,6 +5,7 @@ import static pl.tdf.atak.TAKLog.preferences.PreferencesKeys.PREFERENCES_EVENTS_
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+
 import pl.tdf.atak.TAKLog.plugin.R;
 
 import com.atakmap.android.gui.PanEditTextPreference;

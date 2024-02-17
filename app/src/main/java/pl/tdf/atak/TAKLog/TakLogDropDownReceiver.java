@@ -39,11 +39,13 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
     private final RecyclerView recyclerView;
     private final SharedPreferenceChangeListener preferenceChangeListener;
     private final SharedPreferences sharedPrefs;
+    private final Context context;
 
     private SortMode sortMode = SortMode.TIME;
 
     protected TakLogDropDownReceiver(MapView mapView, final Context context) {
         super(mapView);
+        this.context = context;
         logView = PluginLayoutInflater.inflate(context, R.layout.log_layout, null);
         recyclerViewAdapter = new RecyclerViewAdapter(mapView, context);
 
@@ -57,7 +59,7 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
         deleteBtn.setOnClickListener(view -> recyclerViewAdapter.clear());
 
         Button sortButton = logView.findViewById(R.id.sort);
-        sortButton.setText("Sort by " + SortMode.DISTANCE.getLabel());
+        sortButton.setText(context.getString(R.string.sort_by, SortMode.DISTANCE.getLabel()));
         sortButton.setOnClickListener(view -> {
             toggleSort((Button) view);
             recyclerView.scrollToPosition(0);
@@ -76,17 +78,16 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
         sharedPrefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
-    private void toggleSort(Button view) {
+    private void toggleSort(Button button) {
         if (sortMode == SortMode.DISTANCE) {
             sortMode = SortMode.TIME;
             recyclerViewAdapter.sort(new TimeComparator());
-            view.setText("Sort by " + SortMode.DISTANCE.getLabel());
-        }
-        else if (sortMode == SortMode.TIME) {
+            button.setText(context.getString(R.string.sort_by, SortMode.DISTANCE.getLabel()));
+        } else if (sortMode == SortMode.TIME) {
             sortMode = SortMode.DISTANCE;
             recyclerViewAdapter.recalculateDistance();
             recyclerViewAdapter.sort(new DistanceComparator());
-            view.setText("Sort by " + SortMode.TIME.getLabel());
+            button.setText(context.getString(R.string.sort_by, SortMode.TIME.getLabel()));
         }
         updateSubtitle();
     }
@@ -119,7 +120,7 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
 
     private void updateSubtitle() {
         TextView subtitle = logView.findViewById(R.id.subtitle);
-        subtitle.setText("Showing last " + PreferencesResolver.getLogLimit() + " events, sorted by " + sortMode.getLabel());
+        subtitle.setText(context.getString(R.string.subtitle, PreferencesResolver.getLogLimit(), sortMode.getLabel()));
     }
 
     @Override

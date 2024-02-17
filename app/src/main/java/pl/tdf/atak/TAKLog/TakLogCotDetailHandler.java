@@ -19,6 +19,7 @@ public class TakLogCotDetailHandler extends CotDetailHandler {
     public CommsMapComponent.ImportResult toItemMetadata(MapItem mapItem, CotEvent cotEvent, CotDetail cotDetail) {
         return CommsMapComponent.ImportResult.SUCCESS;
     }
+
     @Override
     public boolean toCotDetail(MapItem mapItem, CotEvent cotEvent, CotDetail cotDetail) {
         if (mapItem != null && mapItem.getTitle() != null) {

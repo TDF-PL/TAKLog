@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 
 public class RecyclerView extends androidx.recyclerview.widget.RecyclerView {
 
-
     public RecyclerView(Context context) {
         super(context);
     }

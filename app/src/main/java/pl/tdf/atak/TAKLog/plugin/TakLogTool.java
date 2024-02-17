@@ -6,8 +6,6 @@ import android.content.Context;
 
 import com.atak.plugins.impl.AbstractPluginTool;
 
-import pl.tdf.atak.TAKLog.plugin.R;
-
 
 public class TakLogTool extends AbstractPluginTool {
 

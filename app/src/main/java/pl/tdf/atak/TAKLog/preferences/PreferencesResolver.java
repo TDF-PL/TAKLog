@@ -13,7 +13,7 @@ public class PreferencesResolver {
     public static int getLogLimit() {
         String limit = PreferenceManager
                 .getDefaultSharedPreferences(getMapView().getContext())
-                .getString(PREFERENCES_EVENTS_LIMIT, logLimitFallback + "");
+                .getString(PREFERENCES_EVENTS_LIMIT, Integer.toString(logLimitFallback));
 
         try {
             return Integer.parseInt(limit);

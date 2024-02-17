@@ -3,6 +3,13 @@
     <!-- App -->
     <string name="app_name">TAKLog</string>
     <!-- description -->
+    <string name="title">Event Log</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="subtitle">Showing last %1$d events, sorted by %2$s</string>
     <string name="app_desc">Log of incoming events</string>
-
+    <string name="sort_by">Sort by %1$s</string>
+    <string name="restore_dialog_title">Not existing item</string>
+    <string name="restore_dialog_content">The item does not exist. Would you like to add it to the map?</string>
+    <string name="restore_dialog_positive">Yes, add</string>
 </resources>

@@ -43,11 +43,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
     private final MapView mapView;
     private final LayoutInflater inflater;
     private final List<LogElement> items = new ArrayList<>();
+    private final Context context;
     private Comparator<LogElement> comparator = new TimeComparator();
 
-    public RecyclerViewAdapter(MapView mapView, Context plugin) {
+    public RecyclerViewAdapter(MapView mapView, Context context) {
         this.mapView = mapView;
-        this.inflater = LayoutInflater.from(plugin);
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
     }
 
     public void addItem(MapItem item) {
@@ -104,10 +106,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
         String readableTime = getReadableTime(mapItem);
         String author_name = getAuthorName(mapItem, mapView);
         String callsign = mapItem.getTitle();
-        String distance = String.format(Locale.US, "%.1f", logElement.getDistance()) + "m";
-        String subtitle = author_name == null ?
-                readableTime + ", " + distance :
-                readableTime + " by " + author_name + ", " + distance;
+        String distance = String.format(Locale.US, "%.1f", logElement.getDistance());
+        String subtitle = author_name == null ? String.format("%s, %s m", readableTime, distance) : String.format("%s by %s, %s m", readableTime, author_name, distance);
 
         ATAKUtilities.SetIcon(mapView.getContext(), view.icon, mapItem);
         view.subtitle.setText(subtitle);
@@ -125,7 +125,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
             items.sort(comparator);
             this.comparator = comparator;
         } else {
-            Log.e(TAG, "You need plugin version ?=" + Build.VERSION_CODES.N + " to run this feature");
+            Log.e(TAG, "You need plugin version =" + Build.VERSION_CODES.N + " to run the sort feature");
         }
     }
 
@@ -155,13 +155,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter {
                 MapTouchController.goTo(item, true);
             } else {
                 final AlertDialog.Builder dialog = new AlertDialog.Builder(mapView.getContext());
-                dialog.setTitle("Not existing item");
-                dialog.setMessage("The item does not exist. Would you like to add it to the map?");
-                dialog.setPositiveButton("Yes, add", (d, which) -> {
+                dialog.setTitle(context.getString(R.string.restore_dialog_title));
+                dialog.setMessage(context.getString(R.string.restore_dialog_content));
+                dialog.setPositiveButton(context.getString(R.string.restore_dialog_positive), (d, which) -> {
                     restoreMarker(logElement);
                     d.dismiss();
                 });
-                dialog.setNegativeButton("Cancel", (d, which) -> d.dismiss());
+                dialog.setNegativeButton(context.getString(R.string.cancel), (d, which) -> d.dismiss());
                 dialog.show();
             }
         }

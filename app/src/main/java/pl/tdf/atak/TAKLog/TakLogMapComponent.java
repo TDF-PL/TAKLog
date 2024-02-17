@@ -22,10 +22,8 @@ import pl.tdf.atak.TAKLog.preferences.PreferencesFragment;
 
 public class TakLogMapComponent extends DropDownMapComponent {
 
-    private static final String TAG = "TakLogMapComponent";
     private TakLogDropDownReceiver takLogDropDownReceiver;
     private CotDetailHandler handler;
-    private SharedPreferences.OnSharedPreferenceChangeListener onSharedPreferenceChangeListener;
 
 
     public void onCreate(final Context context, Intent intent, final MapView view) {
@@ -42,14 +40,7 @@ public class TakLogMapComponent extends DropDownMapComponent {
     }
 
     private void registerPreferences(final Context context) {
-        ToolsPreferenceFragment
-                .register(
-                        new ToolsPreferenceFragment.ToolPreference(
-                                "TakLog Preferences",
-                                "TakLog Preferences",
-                                PREFERENCES_KEY,
-                                context.getResources().getDrawable(R.drawable.taklog, null),
-                                new PreferencesFragment(context)));
+        ToolsPreferenceFragment.register(new ToolsPreferenceFragment.ToolPreference("TakLog Preferences", "TakLog Preferences", PREFERENCES_KEY, context.getResources().getDrawable(R.drawable.taklog, null), new PreferencesFragment(context)));
     }
 
     @Override
@@ -57,7 +48,5 @@ public class TakLogMapComponent extends DropDownMapComponent {
         takLogDropDownReceiver.closeDropDown();
         CotDetailManager.getInstance().unregisterHandler(handler);
         ToolsPreferenceFragment.unregister(PREFERENCES_KEY);
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .unregisterOnSharedPreferenceChangeListener(onSharedPreferenceChangeListener);
     }
 }

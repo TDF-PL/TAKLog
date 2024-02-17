@@ -22,6 +22,9 @@ import com.atakmap.coremap.maps.time.CoordinatedTime;
 import pl.tdf.atak.TAKLog.recyclerview.RecyclerView;
 import pl.tdf.atak.TAKLog.recyclerview.RecyclerViewAdapter;
 import pl.tdf.atak.TAKLog.plugin.R;
+import pl.tdf.atak.TAKLog.sorting.DistanceComparator;
+import pl.tdf.atak.TAKLog.sorting.SortMode;
+import pl.tdf.atak.TAKLog.sorting.TimeComparator;
 
 public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown.OnStateListener, TimeListener {
 
@@ -31,14 +34,16 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
     private final View logView;
     private final RecyclerViewAdapter recyclerViewAdapter;
     private final TimeViewUpdater timeUpdater;
+    private final RecyclerView recyclerView;
+
+    private SortMode sortMode = SortMode.TIME;
 
     protected TakLogDropDownReceiver(MapView mapView, final Context context) {
         super(mapView);
         logView = PluginLayoutInflater.inflate(context, R.layout.log_layout, null);
         recyclerViewAdapter = new RecyclerViewAdapter(mapView, context);
-        TextView subtitle = logView.findViewById(R.id.subtitle);
-        subtitle.setText("Showing last " + LIST_LIMIT + " events");
-        RecyclerView recyclerView = logView.findViewById(R.id.recyclerView);
+
+        recyclerView = logView.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(
                 context, LinearLayoutManager.VERTICAL, false)
@@ -47,12 +52,37 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
         Button deleteBtn = logView.findViewById(R.id.deleteBtn);
         deleteBtn.setOnClickListener(view -> recyclerViewAdapter.clear());
 
+        Button sortButton = logView.findViewById(R.id.sort);
+        sortButton.setText("Sort by " + SortMode.DISTANCE.getLabel());
+        sortButton.setOnClickListener(view -> {
+            toggleSort((Button) view);
+            recyclerView.scrollToPosition(0);
+        });
+
         timeUpdater = new TimeViewUpdater(mapView, 1000);
         timeUpdater.register(this);
+
+        updateSubtitle();
+    }
+
+    private void toggleSort(Button view) {
+        if (sortMode == SortMode.DISTANCE) {
+            sortMode = SortMode.TIME;
+            recyclerViewAdapter.sort(new TimeComparator());
+            view.setText("Sort by " + SortMode.DISTANCE.getLabel());
+        }
+        else if (sortMode == SortMode.TIME) {
+            sortMode = SortMode.DISTANCE;
+            recyclerViewAdapter.recalculateDistance();
+            recyclerViewAdapter.sort(new DistanceComparator());
+            view.setText("Sort by " + SortMode.TIME.getLabel());
+        }
+        updateSubtitle();
     }
 
     public void addItem(MapItem item) {
         recyclerViewAdapter.addItem(item);
+        recyclerView.scrollToPosition(0);
     }
 
     @Override
@@ -74,6 +104,11 @@ public class TakLogDropDownReceiver extends DropDownReceiver implements DropDown
             }
             showDropDown(logView, HALF_WIDTH, FULL_HEIGHT, FULL_WIDTH, HALF_HEIGHT, false, this);
         }
+    }
+
+    private void updateSubtitle() {
+        TextView subtitle = logView.findViewById(R.id.subtitle);
+        subtitle.setText("Showing last " + LIST_LIMIT + " events, sorted by " + sortMode.getLabel());
     }
 
     @Override

@@ -12,40 +12,61 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="Event Log"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@id/textView"
-                android:text="Showing last X events"
-                android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Event Log"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/textView"
+                    android:text="Showing last X events"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
-            <Button
-                android:id="@+id/deleteBtn"
-                style="@style/darkButton"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:padding="4dp"
-                android:text="Clear"
-                android:textAppearance="@android:style/TextAppearance.Material.Small"
-                android:textSize="12sp" />
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/sort"
+                    style="@style/darkButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:layout_marginRight="4dp"
+                    android:text="Sort by X"
+                    android:textAppearance="@android:style/TextAppearance.Material.Small"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/deleteBtn"
+                    style="@style/darkButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:padding="4dp"
+                    android:text="Clear"
+                    android:textAppearance="@android:style/TextAppearance.Material.Small"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
         </RelativeLayout>
 

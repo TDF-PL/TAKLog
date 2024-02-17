@@ -8,10 +8,12 @@ import java.util.Objects;
 public class LogElement {
     private final MapItem mapItem;
     private final MapGroup mapGroup;
+    private double distance;
 
-    public LogElement(MapItem mapItem, MapGroup mapGroup) {
+    public LogElement(MapItem mapItem, MapGroup mapGroup, double distance) {
         this.mapItem = mapItem;
         this.mapGroup = mapGroup;
+        this.distance = distance;
     }
 
     public MapItem getMapItem() {
@@ -20,6 +22,14 @@ public class LogElement {
 
     public MapGroup getMapGroup() {
         return mapGroup;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 
     @Override
